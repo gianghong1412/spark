@@ -1,8 +1,12 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
+import pyspark.pandas as ps
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pandas as pd
+import numpy as np
+
 
 if __name__ == "__main__":
     session = SparkSession.builder.appName("test").getOrCreate()
@@ -22,7 +26,7 @@ if __name__ == "__main__":
     dataSale = dataFrameReader \
         .option("header","true") \
         .option("inferschema", True) \
-        .csv("in/customer_shopping_data.csv")
+        .csv("btl/in/customer_shopping_data.csv")
 
     print ("====Print schema===")
     dataSale.printSchema()
@@ -64,32 +68,35 @@ if __name__ == "__main__":
         .groupBy("gender") \
         .agg(count("gender").alias("countg")) \
         .show()
-    plt.figure(figsize=(8,8))
-    plt.pie(genderCount["countg"], \
-            labels=genderCount["gender"], \
+    schemaGenderCount = ("gender string,countg interger")
+    dfGenderCount = SparkSession.createDataFrame(genderCount,schemaGenderCount)
+    dpFrame = dfGenderCount.toPandas()
+    plt.figurhowe(figsize=(8,8))
+    plt.pie(dpFrame["countg"], \
+            labels=dpFrame["gender"], \
             autopct="%1.2f%%", \
             colors=["#FFB6D9","#99DBF5"])
     plt.title("Male vs Female")
     plt.legend()
     plt.show()
     
-    aveAgeGender = dataSale \
-        .groupBy("gender") \
-        .agg(avg("age").alias("age averange")) \
-        .show()
+    # aveAgeGender = dataSale \
+    #     .groupBy("gender") \
+    #     .agg(avg("age").alias("age averange")) \
+    #     .show()
 
-    # responSelectedColumns \
-    #     .groupBy("Category") \
-    #     .agg(sum("quantity").alias("total_quantity")) \
+    # avemarket the most sale
+    # totalPriceMarket = dataSale \
+    #     .groupBy("shopping_mall") \
+    #     .agg(sum("price").alias("total_price")) \
+    #     .orderBy("total_price", ascending = False).show()
+
+    # total by category
+    # totalPriceCategory = dataSale \
+    #     .groupBy("category") \
+    #     .agg(sum("price").alias("total_price"),sum("quantity").alias("total_quantity")) \
     #     .orderBy("total_quantity", ascending = False).show()
     
-    # print ("===add date month year columns===")
-    # splitDate = split(responSelectedColumns["invoice_date"],"/")
-    # responseSplitDate = responSelectedColumns.withColumn("day",splitDate.getItem(0)) \
-                                            # .withColumn("month",splitDate.getItem(1).cast(IntegerType())) \
-                                            # .withColumn("year",splitDate.getItem(2))
-    # responseSplitDate.show(truncate=False)
-
     # print ("===add total_price each year")
     # responseSplitDate \
     #     .groupBy("year") \
