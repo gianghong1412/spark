@@ -46,7 +46,7 @@ if __name__ == "__main__":
         .orderBy("year", ascending = False) \
         .write.mode("overwrite") \
         .option("header", "true") \
-        .csv("out/totalPriceSale.csv")
+        .csv("out/totalPriceSale")
     
     print("===doanh thu trung binh moi thang nam 2021===")
     aveSalePerMonth2021 = dataSale \
@@ -69,25 +69,21 @@ if __name__ == "__main__":
     print("==== count gender===")
     genderCount = dataSale \
         .groupBy("gender") \
-        .agg(count("gender").alias("countg")) \
-        .show()
-    
-    # schemaGenderCount = ("gender string,countg interger")
-    # dfGenderCount = SparkSession.createDataFrame(genderCount,schemaGenderCount)
-    # dpFrame = dfGenderCount.toPandas()
-    # plt.figure(figsize=(8,8))
-    # plt.pie(dpFrame["countg"], \
-    #         labels=dpFrame["gender"], \
-    #         autopct="%1.2f%%", \
-    #         colors=["#FFB6D9","#99DBF5"])
-    # plt.title("Male vs Female")
-    # plt.legend()
-    # plt.show()
+        .agg(count("gender").alias("count")) \
+        .write.mode("overwrite") \
+        .option("header", "true") \
+        .csv("out/genderCount")
     
     print("=== do tuoi trung binh theo gioi tinh===")
     aveAgeGender = dataSale \
         .groupBy("gender") \
         .agg(avg("age").alias("age averange")) \
+        .show()
+    
+    print("=== do tuoi khach hang===")
+    ageCount = dataSale \
+        .groupBy("age") \
+        .count() \
         .show()
 
     print("===Doanh thu cua cac dia diem===")
