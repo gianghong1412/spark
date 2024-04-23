@@ -27,7 +27,7 @@ if __name__ == "__main__":
     dataSale = dataFrameReader \
         .option("header","true") \
         .option("inferschema", True) \
-        .csv("btl/in/customer_shopping_data.csv")
+        .csv("in/customer_shopping_data.csv")
 
     print ("====Print schema===")
     dataSale.printSchema()
@@ -40,11 +40,13 @@ if __name__ == "__main__":
 
     #analysis and visualization
     print("tong doanh thu theo nam")
-    totalNumberSale = dataSale \
+    totalPriceSale = dataSale \
         .groupBy("year") \
         .agg(sum("price").alias("total_price")) \
-        .orderBy("total_price", ascending = False) \
-        .show()
+        .orderBy("year", ascending = False) \
+        .write.mode("overwrite") \
+        .option("header", "true") \
+        .csv("out/totalPriceSale.csv")
     
     print("===doanh thu trung binh moi thang nam 2021===")
     aveSalePerMonth2021 = dataSale \
