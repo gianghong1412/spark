@@ -12,22 +12,31 @@ import numpy as np
 if __name__ == "__main__":
     session = SparkSession.builder.appName("test").getOrCreate()
     dataFrameReader = session.read
-    data_Schema = [ \
-        StructField("invoice_no",StringType(),True), \
-        StructField("customer_id",StringType(),True), \
-        StructField("age",IntegerType(),True), \
-        StructField("category",StringType(),True), \
-        StructField("quantity",IntegerType(),True), \
-        StructField("price",DoubleType(),True), \
-        StructField("payment_method",StringType(),True), \
-        StructField("invoice_date",DateType(),True), \
-        StructField("shopping_mall",StringType(),True) \
-    ]
-    finalStruct = StructType(fields=data_Schema)
+    # data_Schema = [ 
+    #     StructField("invoice_no",StringType(),True), 
+    #     StructField("customer_id",StringType(),True), 
+    #     StructField("age",IntegerType(),True), 
+    #     StructField("category",StringType(),True), 
+    #     StructField("quantity",IntegerType(),True), 
+    #     StructField("price",FloatType(),True), 
+    #     StructField("payment_method",StringType(),True), 
+    #     StructField("invoice_date",DateType(),True), 
+    #     StructField("shopping_mall",StringType(),True) ]
+    data_Schema = StructType() \
+        .add("invoice_no",StringType(),True) \
+        .add("customer_id",StringType(),True) \
+        .add("age",IntegerType(),True) \
+        .add("category",StringType(),True) \
+        .add("quantity",IntegerType(),True) \
+        .add("price",FloatType(),True) \
+        .add("payment_method",StringType(),True) \
+        .add("invoice_date",DateType(),True) \
+        .add("shopping_mall",StringType(),True)
+    # finalStruct = StructType(data_Schema)
     dataSale = dataFrameReader \
         .option("header","true") \
-        .option("inferschema", True) \
-        .csv("in/customer_shopping_data.csv")
+        .schema(data_Schema) \
+        .csv("in/customer_shopping_data.csv") 
 
     print ("====Print schema===")
     dataSale.printSchema()
@@ -39,40 +48,38 @@ if __name__ == "__main__":
                                             .withColumn("year",splitDate.getItem(2))
 
     #analysis and visualization
-    print("tong doanh thu theo nam")
-    totalPriceSale = dataSale \
-        .groupBy("year") \
-        .agg(sum("price").alias("total_price")) \
-        .orderBy("year", ascending = False) \
-        .write.mode("overwrite") \
-        .option("header", "true") \
-        .csv("out/totalPriceSale")
+    # print("tong doanh thu theo nam")
+    # totalPriceSale = dataSale \
+    #     .groupBy("year") \
+    #     .agg(sum("price").alias("total_price")) \
+    #     .orderBy("year", ascending = False) \
+    #     .write.mode("overwrite") \
+    #     .option("header", "true") \
+    #     .csv("out/totalPriceSale")
     
     print("===doanh thu trung binh moi thang nam 2021===")
     aveSalePerMonth2021 = dataSale \
         .filter(dataSale["year"]=="2021") \
         .groupBy("month") \
-        .agg(avg("price").alias("average"), \
-             sum("price").alias("price")) \
-        .orderBy("average", ascending = False)
+        .agg(sum("price").alias("total_price")) \
+        .orderBy("month", ascending = False)
     aveSalePerMonth2021.show()
 
     print("===doanh thu trung binh moi thang nam 2022===")
     aveSalePerMonth2022 = dataSale \
         .filter(dataSale["year"]=="2022") \
         .groupBy("month") \
-        .agg(avg("price").alias("average"), \
-             sum("price").alias("price")) \
-        .orderBy("average", ascending = False)
+        .agg(sum("price").alias("total_price")) \
+        .orderBy("month", ascending = False)
     aveSalePerMonth2022.show()
 
-    print("==== count gender===")
-    genderCount = dataSale \
-        .groupBy("gender") \
-        .agg(count("gender").alias("count")) \
-        .write.mode("overwrite") \
-        .option("header", "true") \
-        .csv("out/genderCount")
+    # print("==== count gender===")
+    # genderCount = dataSale \
+    #     .groupBy("gender") \
+    #     .agg(count("gender").alias("count")) \
+    #     .write.mode("overwrite") \
+    #     .option("header", "true") \
+    #     .csv("out/genderCount")
     
     print("=== do tuoi trung binh theo gioi tinh===")
     aveAgeGender = dataSale \
@@ -98,13 +105,6 @@ if __name__ == "__main__":
         .agg(sum("price").alias("total_price"),sum("quantity").alias("total_quantity")) \
         .orderBy("total_price", ascending = False).show()
     
-    print ("===Doanh thu hang nam===")
-    totalYear=dataSale \
-        .groupBy("year") \
-        .agg(sum("price").alias("total_price")) \
-        .orderBy("total_price", ascending = False) \
-        .show()
-
     # print ("===total price each category in 2022")
     # response2022 = responseSplitDate.filter(responseSplitDate['year'] == "2022") \
     #                 .groupBy("month") \

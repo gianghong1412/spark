@@ -4,12 +4,6 @@ from collections import Counter
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def read_csv():
-    
-    pyplot.barh(totalPriceSale['year'],totalPriceSale['total_price'],
-            color='blue',label="year / total_price")
-    pyplot.show()
-
 if __name__ == "__main__":
     df = pd.read_csv('out/totalPriceSale.csv/part-00000-10ba2a99-85b0-4134-8fd4-fd029dde5cc5-c000.csv')
     df.plot.barh(x='year',y='total_price',color='blue')
@@ -23,3 +17,5 @@ if __name__ == "__main__":
             colors=["#FFB6D9","#99DBF5"])
     plt.title("Male vs Female")
     plt.show()
+
+    
