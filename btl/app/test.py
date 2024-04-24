@@ -2,12 +2,6 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 import pyspark.sql.functions as f
-import pyspark.pandas as ps
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
-import numpy as np
-
 
 if __name__ == "__main__":
     session = SparkSession.builder.appName("test").getOrCreate()
@@ -40,7 +34,7 @@ if __name__ == "__main__":
     splitDate = split(dataSale["invoice_date"],"/")
     dataSale = dataSale.withColumn("month",splitDate.getItem(1).cast(IntegerType())) \
                         .withColumn("year",splitDate.getItem(2))
-    # dataSale = dataSale.distinct()
+    dataSale = dataSale.distinct()
 
     #analysis and visualization
     # print("tong doanh thu theo nam")
@@ -52,33 +46,39 @@ if __name__ == "__main__":
     #     .option("header", "true") \
     #     .csv("out/totalPriceSale")
     
-    print("===doanh thu trung binh moi thang ===")
-    totalSalePerMonth = dataSale \
-        .groupBy("month") \
-        .agg(sum("price").alias("total_price")) \
-        .orderBy("month", ascending = False)
-    aveSalePerMonth = totalSalePerMonth.agg(avg("total_price").alias("average of month")).show()
+    # print("===doanh thu trung binh moi thang ===")
+    # totalSalePerMonth = dataSale \
+    #     .groupBy("month") \
+    #     .agg(sum("price").alias("total_price")) \
+    #     .orderBy("month", ascending = False)
+    # aveSalePerMonth = totalSalePerMonth.agg(avg("total_price").alias("average of month")).show()
 
-    print("===doanh thu moi thang theo nam=== ")
-    totalSalePerMonthInYear = dataSale \
-        .groupBy("year","month") \
-        .agg(sum("price").alias("total_price")) \
-        .orderBy("total_price", ascending = False)
-    totalSalePerMonthInYear.show(50)
+    # print("===doanh thu moi thang===")
 
-    # print("====ti le khach hang nam va nu===")
-    # genderCount = dataSale \
-    #     .groupBy("gender") \
-    #     .agg(count("gender").alias("count")) \
+    # totalSalePerMonthInYear = dataSale \
+    #     .groupBy("year","month") \
+    #     .agg(round(sum("price"),2).alias("total_price")) \
+    #     .orderBy("year","month", ascending = True) \
+    #     .withColumn("timeData",concat_ws("/",col("month"),col("year"))) \
     #     .write.mode("overwrite") \
     #     .option("header", "true") \
-    #     .csv("out/genderCount")
+    #     .csv("out/totalSalePerMonthInYear")
+
+    print("====ti le khach hang nam va nu===")
+    genderCount = dataSale \
+        .groupBy("gender") \
+        .agg(count("gender").alias("count")) \
+        .write.mode("overwrite") \
+        .option("header", "true") \
+        .csv("out/genderCount")
     
-    # print("=== do tuoi trung binh theo gioi tinh===")
-    # aveAgeGender = dataSale \
-    #     .groupBy("gender") \
-    #     .agg(avg("age").alias("age averange")) \
-    #     .show()
+    print("=== do tuoi trung binh theo gioi tinh===")
+    aveAgeGender = dataSale \
+        .groupBy("gender") \
+        .agg(avg("age").alias("age averange")) \
+        .write.mode("overwrite") \
+        .option("header", "true") \
+        .csv("out/aveAgeGender")
     
     # print("=== do tuoi khach hang===")
     # ageCount = dataSale \
@@ -86,16 +86,16 @@ if __name__ == "__main__":
     #     .count() \
     #     .show()
 
-    print ("===so luong loai mat hang theo gioi tinh")
-    quantityCategoryByGender = dataSale \
-        .groupBy("gender","category") \
-        .agg(sum("quantity").alias("total_quantity")) \
-        .orderBy("category","gender") \
-        .show(50)
+    # print ("===so luong loai mat hang theo gioi tinh")
+    # quantityCategoryByGender = dataSale \
+    #     .groupBy("gender","category") \
+    #     .agg(sum("quantity").alias("total_quantity")) \
+    #     .orderBy("category","gender") \
+    #     .show(50)
     
-    quantityCategoryByGender.write.mode("overwrite") \
-        .option("header", "true") \
-        .csv("out/quantityCategoryByGender")
+    # quantityCategoryByGender.write.mode("overwrite") \
+    #     .option("header", "true") \
+    #     .csv("out/quantityCategoryByGender")
 
     # print("===Doanh thu cua cac dia diem===")
     # totalPriceMarket = dataSale \
@@ -103,14 +103,14 @@ if __name__ == "__main__":
     #     .agg(sum("price").alias("total_price")) \
     #     .orderBy("total_price", ascending = False).show()
 
-    print ("===Doanh thu cua tung mat hang===")
-    totalPriceCategory = dataSale \
-        .groupBy("category") \
-        .agg(sum("price").alias("total_price"),sum("quantity").alias("total_quantity")) \
-        .orderBy("total_price", ascending = False)
-    totalPriceCategory.write.mode("overwrite") \
-                            .option("header", "true") \
-                            .csv("out/totalPriceCategory")
+    # print ("===Doanh thu cua tung mat hang===")
+    # totalPriceCategory = dataSale \
+    #     .groupBy("category") \
+    #     .agg(sum("price").alias("total_price"),sum("quantity").alias("total_quantity")) \
+    #     .orderBy("total_price", ascending = False)
+    # totalPriceCategory.write.mode("overwrite") \
+    #                         .option("header", "true") \
+    #                         .csv("out/totalPriceCategory")
     
     # print ("===doanh thu tung loai hang theo thang trong 2022")
     # totalCategoryEachMonIn2022 = dataSale.filter(dataSale['year'] == "2022") \
