@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sn
 
 if __name__ == "__main__":
-        # dt = pd.read_csv('out/totalPriceSale/part-00000-de780aca-7381-463d-afa9-d137331512da-c000.csv')
+        # dt = pd.read_csv('out/totalPriceSale/totalPriceSale.csv')
         # plt.figure(figsize=(16,8))
         # plt.barh(dt["year"],dt["total_price"],color="red")
         # plt.xlabel("Tong doanh thu")
@@ -14,7 +14,7 @@ if __name__ == "__main__":
         # plt.title("Doanh thu ban hang cac nam")
         # plt.show()
 
-        # dt = pd.read_csv('out/totalSalePerMonthInYear/part-00000-b3d62014-6b2d-4660-92b9-49e1cd9613c5-c000.csv')
+        # dt = pd.read_csv('out/totalSalePerMonthInYear/totalSalePerMonthInYear.csv')
         # plt.figure(figsize=(28,8))
         # plt.plot(dt["timeData"],dt["total_price"],color="green",marker="o",linestyle="solid")
         # plt.ylabel("Doanh thu $",fontsize=6)
@@ -24,15 +24,42 @@ if __name__ == "__main__":
         # plt.grid(linestyle="--")
         # plt.show()
 
-        dt = pd.read_csv('out/genderCount/part-00000-a9f2c6f0-c27e-4242-81ed-fab568cff1cc-c000.csv')
-        plt.figure(figsize=(18,18))
-        plt.pie(dt["count"], \
-                labels=dt["gender"], \
-                autopct="%1.2f%%", \
-                colors=["#FFB6D9","#99DBF5"])
-        plt.title("Ti le khach hang nam va nu")
-        plt.legend()
-        plt.show()
+        # dt = pd.read_csv('out/genderCount/genderCount.csv')
+        # plt.figure(figsize=(18,18))
+        # plt.pie(dt["count"], \
+        #         labels=dt["gender"], \
+        #         autopct="%1.2f%%", \
+        #         colors=["#FFB6D9","#99DBF5"])
+        # plt.title("Ti le khach hang nam va nu")
+        # plt.legend()
+        # plt.show()
+
+        # dt = pd.read_csv('out/aveAgeGender/aveAgeGender.csv')
+        # plt.figure(figsize=(4,10))
+        # plt.bar(dt["gender"],dt["age_averange"],color="red")
+        # plt.xlabel("Gioi tinh")
+        # plt.ylabel("Do tuoi trung binh")
+        # plt.title("Do tuoi trung binh khach hang nam va nu")
+        # plt.show()
+
+        # dt = pd.read_csv('out/ageCount/ageCount.csv')
+        # plt.figure(figsize=(16,8))
+        # plt.barh(dt["age"],dt["count"],color="red")
+        # plt.xlabel("So luong")
+        # plt.ylabel("Tuoi")
+        # plt.yticks(dt["age"],fontsize=5)
+        # plt.grid(linestyle="--")
+        # plt.title("So luong khach hang theo tuoi")
+        # plt.show()       
+
+        # dt = pd.read_csv('out/quantityCategoryByGender/quantityCategoryByGender.csv')
+        # sn.barplot(data=dt,x=dt["category"],y=dt["total_quantity"],hue=dt["gender"],palette=["red","blue"])
+        # plt.xlabel("Loai mat hang")
+        # plt.ylabel("So luong dat hang")
+        # plt.title("So luong dat hang theo gioi tinh")
+        # plt.xticks(dt["category"],fontsize=10,rotation=45)
+        # plt.show() 
+
 
     # dt = pd.read_csv('out/totalCategoryEachMonIn2022.csv/part-00000-363b2467-0645-48b8-9e1a-0e6346201b82-c000.csv')
     # sn.barplot(data=dt,x=dt["month"],y=dt["total_price"],hue=dt["category"],palette=["red","yellow","green","blue","purple","pink","black","grey"])
