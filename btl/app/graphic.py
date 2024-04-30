@@ -44,6 +44,15 @@ if __name__ == "__main__":
         # plt.title("Do tuoi trung binh khach hang nam va nu")
         # plt.show()
 
+        # dt = pd.read_csv('out/priceByGender/priceByGender.csv')
+        # plt.figure(figsize=(4,10))
+        # plt.bar(dt["gender"],dt["total_price"],color="red")
+        # plt.xlabel("Gioi tinh")
+        # plt.ylabel("Chi phi mua sam")
+        # plt.grid(linestyle="--")
+        # plt.title("Chi phi mua sam cua khach hang nam va nu")
+        # plt.show()
+
         # dt = pd.read_csv('out/ageCount/ageCount.csv')
         # plt.figure(figsize=(16,8))
         # plt.barh(dt["age"],dt["count"],color="red")

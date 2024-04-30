@@ -27,6 +27,8 @@ if __name__ == "__main__":
     print ("====Print schema===")
     dataSale.printSchema()
 
+    dataSale.describe().show()
+
     print ("===Print selected columns")
     dataSale.withColumn("invoice_date",to_date(col("invoice_date"),"dd/mm/yyyy"))
     dataSale = dataSale.select("invoice_no","customer_id","gender","age","category","quantity","price","payment_method","invoice_date","shopping_mall")
@@ -98,8 +100,16 @@ if __name__ == "__main__":
     #     .option("header", "true") \
     #     .csv("out/quantityCategoryByGender")
     
+    print ("===doanh thu theo gioi tinh")
+    priceByGender = dataSale \
+        .groupBy("gender") \
+        .agg(sum("price").alias("total_price")) \
+        .write.mode("overwrite") \
+        .option("header", "true") \
+        .csv("out/priceByGender")
+
     # print ("===doanh thu cac loai mat hang theo gioi tinh")
-    # quantityCategoryByGender = dataSale \
+    # priceCategoryByGender = dataSale \
     #     .groupBy("gender","category") \
     #     .agg(sum("price").alias("total_price")) \
     #     .orderBy("category","gender") \
