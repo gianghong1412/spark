@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     print ("===Print selected columns")
     dataSale.withColumn("invoice_date",to_date(col("invoice_date"),"dd/mm/yyyy"))
-    dataSale = dataSale.select("customer_id","gender","age","category","quantity","price","payment_method","invoice_date","shopping_mall")
+    dataSale = dataSale.select("invoice_no","customer_id","gender","age","category","quantity","price","payment_method","invoice_date","shopping_mall")
 
     splitDate = split(dataSale["invoice_date"],"/")
     dataSale = dataSale.withColumn("month",splitDate.getItem(1).cast(IntegerType())) \
@@ -98,14 +98,23 @@ if __name__ == "__main__":
     #     .option("header", "true") \
     #     .csv("out/quantityCategoryByGender")
     
-    print("===Doanh thu cua cac dia diem===")
-    totalPriceMarket = dataSale \
-        .groupBy("shopping_mall") \
-        .agg(round(sum("price"),2).alias("total_price")) \
-        .orderBy("total_price", ascending = False) \
-        .write.mode("overwrite") \
-        .option("header", "true") \
-        .csv("out/totalPriceMarket")
+    # print ("===doanh thu cac loai mat hang theo gioi tinh")
+    # quantityCategoryByGender = dataSale \
+    #     .groupBy("gender","category") \
+    #     .agg(sum("price").alias("total_price")) \
+    #     .orderBy("category","gender") \
+    #     .write.mode("overwrite") \
+    #     .option("header", "true") \
+    #     .csv("out/priceCategoryByGender")
+    
+    # print("===Doanh thu cua cac dia diem===")
+    # totalPriceMarket = dataSale \
+    #     .groupBy("shopping_mall") \
+    #     .agg(round(sum("price"),2).alias("total_price")) \
+    #     .orderBy("total_price", ascending = False) \
+    #     .write.mode("overwrite") \
+    #     .option("header", "true") \
+    #     .csv("out/totalPriceMarket")
 
     # print ("===Doanh thu cua tung mat hang===")
     # totalPriceCategory = dataSale \
@@ -115,6 +124,32 @@ if __name__ == "__main__":
     # totalPriceCategory.write.mode("overwrite") \
     #                         .option("header", "true") \
     #                         .csv("out/totalPriceCategory")
+    # print ("===Doanh thu 20 don hang tot nhat ====")
+    # topPrice  = dataSale \
+    #     .orderBy("price",ascending = False) \
+    #     .show(100)
+
+    # print("=== so luong don hang theo so luong hang===")
+    # countInvoiceByQuantity = dataSale \
+    #     .groupBy("quantity") \
+    #     .count() \
+    #     .show()
+
+    print("===Doanh thu theo hinh thuc thanh toan")
+    priceMenthod = dataSale \
+        .groupBy("payment_method") \
+        .agg(round(sum("price"),2).alias("total_price")) \
+        .orderBy("total_price",ascending = False) \
+        .show()
+    
+    print("===So luong theo invoice_no")
+    quantityInvoiceNo = dataSale \
+        .groupBy("invoice_no") \
+        .count().alias("count") \
+        .filter(col("count")>1) \
+        .orderBy("count",ascending = False) \
+        .show()
+    
     
     # print ("===doanh thu tung loai hang theo thang trong 2022")
     # totalCategoryEachMonIn2022 = dataSale.filter(dataSale['year'] == "2022") \

@@ -1,0 +1,17 @@
+gender,category,total_quantity
+Female,Books,8776
+Male,Books,6206
+Female,Clothing,62039
+Male,Clothing,41519
+Female,Cosmetics,27261
+Male,Cosmetics,18204
+Female,Food & Beverage,26362
+Male,Food & Beverage,17915
+Female,Shoes,17906
+Male,Shoes,12311
+Female,Souvenir,8976
+Male,Souvenir,5895
+Female,Technology,8977
+Male,Technology,6044
+Female,Toys,18362
+Male,Toys,11959
