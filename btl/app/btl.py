@@ -20,7 +20,7 @@ if __name__ == "__main__":
     dataSale = dataFrameReader \
         .option("header","true") \
         .option('inferschema',True) \
-        .csv("in/Online Retail.csv") 
+        .csv("in/OnlineRetail.csv") 
     print ("====Print schema===")
     dataSale.printSchema()
     dataSale.describe().show()
