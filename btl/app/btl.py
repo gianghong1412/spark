@@ -23,12 +23,13 @@ if __name__ == "__main__":
         .csv("in/OnlineRetail.csv") 
     print ("====Print schema===")
     dataSale.printSchema()
-    dataSale.describe().show()
-    dataSale.na.drop()
+    # dataSale.describe().show()
+    dataSale.na.drop(how='any')
+    dataSale.dropna()
     dataSale =  dataSale \
         .filter(dataSale['Quantity']>0) \
         .filter(dataSale['UnitPrice']>0)
-
+    dataSale.describe().show()
     # splitDate = split(dataSale["InvoiceDate"],"/")
     # dataSale = dataSale.withColumn("month",splitDate.getItem(0).cast(IntegerType())) \
     #                     .withColumn("year",splitDate.getItem(2))
@@ -61,21 +62,21 @@ if __name__ == "__main__":
     #     .option("header", "true") \
     #     .csv("outBTL/totalPriceMarket")
 
-    print ("===Doanh thu cua tung mat hang===")
-    totalPriceCategory = dataSale \
-        .groupBy("StockCode") \
-        .agg(round(sum(dataSale['UnitPrice']*dataSale["Quantity"]),2).alias("total_price")) \
-        .orderBy("total_price", ascending = False) \
-        .write.mode("overwrite") \
-        .option("header", "true") \
-        .csv("outBTL/totalPriceCategory")
+    # print ("===Doanh thu cua tung mat hang===")
+    # totalPriceCategory = dataSale \
+    #     .groupBy("StockCode") \
+    #     .agg(round(sum(dataSale['UnitPrice']*dataSale["Quantity"]),2).alias("total_price")) \
+    #     .orderBy("total_price", ascending = False) \
+    #     .write.mode("overwrite") \
+    #     .option("header", "true") \
+    #     .csv("outBTL/totalPriceCategory")
 
-    dataCustomerCount = dataSale \
-        .groupBy("CustomerID") \
-        .agg(count_distinct("InvoiceNo").alias('frequency')) \
-        .write.mode("overwrite") \
-        .option("header", "true") \
-        .csv("outBTL/dataCustomerCount")
+    # dataCustomerCount = dataSale \
+    #     .groupBy("CustomerID") \
+    #     .agg(count_distinct("InvoiceNo").alias('frequency')) \
+    #     .write.mode("overwrite") \
+    #     .option("header", "true") \
+    #     .csv("outBTL/dataCustomerCount")
     
     # dataCustomerAmount = dataSale \
     #     .groupBy("CustomerID") \
