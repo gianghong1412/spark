@@ -24,24 +24,24 @@ if __name__ == "__main__":
     print ("====Print schema===")
     dataSale.printSchema()
     # dataSale.describe().show()
-    dataSale.na.drop(how='any')
-    dataSale.dropna()
+    dataSale.na.drop()
     dataSale =  dataSale \
         .filter(dataSale['Quantity']>0) \
         .filter(dataSale['UnitPrice']>0)
-    dataSale.describe().show()
-    # splitDate = split(dataSale["InvoiceDate"],"/")
-    # dataSale = dataSale.withColumn("month",splitDate.getItem(0).cast(IntegerType())) \
-    #                     .withColumn("year",splitDate.getItem(2))
+    
+    splitDate = split(dataSale["InvoiceDate"],"/")
+    dataSale = dataSale.withColumn("month",splitDate.getItem(0).cast(IntegerType())) \
+                        .withColumn("year",splitDate.getItem(2))
 
-    # print("tong doanh thu theo nam")
-    # totalPriceSale = dataSale \
-    #     .groupBy("year") \
-    #     .agg(round(sum(dataSale['UnitPrice']*dataSale["Quantity"]),2).alias("total_price")) \
-    #     .orderBy("year", ascending = False) \
-    #     .write.mode("overwrite") \
-    #     .option("header", "true") \
-    #     .csv("outBTL/totalPriceSale")
+    print("tong doanh thu theo nam")
+    totalPriceSale = dataSale \
+        .groupBy("year") \
+        .agg(round(sum(dataSale['UnitPrice']*dataSale["Quantity"]),2).alias("total_price"),
+            round((sum(dataSale['UnitPrice']*dataSale["Quantity"])/12),2).alias("averange per month")    ) \
+        .orderBy("year", ascending = False) \
+        .write.mode("overwrite") \
+        .option("header", "true") \
+        .csv("outBTL/totalPriceSale")
     
     # print("===doanh thu moi thang===")
     # totalSalePerMonthInYear = dataSale \
