@@ -43,24 +43,24 @@ if __name__ == "__main__":
         .option("header", "true") \
         .csv("outBTL/totalPriceSale")
     
-    # print("===doanh thu moi thang===")
-    # totalSalePerMonthInYear = dataSale \
-    #     .groupBy("year","month") \
-    #     .agg(round(sum(dataSale['UnitPrice']*dataSale["Quantity"]),2).alias("total_price")) \
-    #     .orderBy("year","month", ascending = True) \
-    #     .withColumn("timeData",concat_ws("/",col("month"),col("year"))) \
-    #     .write.mode("overwrite") \
-    #     .option("header", "true") \
-    #     .csv("outBTL/totalSalePerMonthInYear")
+    print("===doanh thu moi thang===")
+    totalSalePerMonthInYear = dataSale \
+        .groupBy("year","month") \
+        .agg(round(sum(dataSale['UnitPrice']*dataSale["Quantity"]),2).alias("total_price")) \
+        .orderBy("year","month", ascending = True) \
+        .withColumn("timeData",concat_ws("/",col("month"),col("year"))) \
+        .write.mode("overwrite") \
+        .option("header", "true") \
+        .csv("outBTL/totalSalePerMonthInYear")
 
-    # print("===Doanh thu cua cac nuoc===")
-    # totalPriceMarket = dataSale \
-    #     .groupBy("Country") \
-    #     .agg(round(sum(dataSale['UnitPrice']*dataSale["Quantity"]),2).alias("total_price")) \
-    #     .orderBy("total_price", ascending = False) \
-    #     .write.mode("overwrite") \
-    #     .option("header", "true") \
-    #     .csv("outBTL/totalPriceMarket")
+    print("===Doanh thu cua cac nuoc===")
+    totalPriceMarket = dataSale \
+        .groupBy("Country") \
+        .agg(round(sum(dataSale['UnitPrice']*dataSale["Quantity"]),2).alias("total_price")) \
+        .orderBy("total_price", ascending = False) \
+        .write.mode("overwrite") \
+        .option("header", "true") \
+        .csv("outBTL/totalPriceMarket")
 
     # print ("===Doanh thu cua tung mat hang===")
     # totalPriceCategory = dataSale \
@@ -78,18 +78,18 @@ if __name__ == "__main__":
     #     .option("header", "true") \
     #     .csv("outBTL/dataCustomerCount")
     
-    # dataCustomerAmount = dataSale \
-    #     .groupBy("CustomerID") \
-    #     .agg(round(sum(dataSale['UnitPrice']*dataSale["Quantity"]),2).alias("total_price")) \
-    #     .write.mode("overwrite") \
-    #     .option("header", "true") \
-    #     .csv("outBTL/dataCustomerAmount")
+    dataCustomerAmount = dataSale \
+        .groupBy("CustomerID") \
+        .agg(round(sum(dataSale['UnitPrice']*dataSale["Quantity"]),2).alias("total_price")) \
+        .write.mode("overwrite") \
+        .option("header", "true") \
+        .csv("outBTL/dataCustomerAmount")
 
-    # dataCustomerRecency = dataSale \
-    #     .select("CustomerID","InvoiceDate") \
-    #     .write.mode("overwrite") \
-    #     .option("header", "true") \
-    #     .csv("outBTL/dataCustomerRecency")
+    dataCustomerRecency = dataSale \
+        .select("CustomerID","InvoiceDate") \
+        .write.mode("overwrite") \
+        .option("header", "true") \
+        .csv("outBTL/dataCustomerRecency")
     
         
 

@@ -69,8 +69,6 @@ if __name__ == "__main__":
     IQR = Q3 - Q1
     dataCustomerACR = dataCustomerACR[(dataCustomerACR.total_price >= Q1 - 1.5*IQR) & (dataCustomerACR.total_price <= Q3 + 1.5*IQR)]
 
-
-
     # Removing (statistical) outliers for recency
     Q1 = dataCustomerACR.recency.quantile(0.05)
     Q3 = dataCustomerACR.recency.quantile(0.95)
